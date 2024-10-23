@@ -1,0 +1,102 @@
+package com.example.advancedchatbot.viewmodel;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
+
+import com.example.advancedchatbot.database.entities.Message;
+import com.example.advancedchatbot.repository.ChatRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class AdvancedChatViewModel extends ViewModel {
+
+    private final ChatRepository chatRepository;
+    private final MediatorLiveData<List<Message>> messagesLiveData;
+    private final MutableLiveData<Boolean> loadingState;
+    private final MutableLiveData<String> errorState;
+    private final ExecutorService executorService;
+    private List<Message> cachedMessages;
+
+    public AdvancedChatViewModel(ChatRepository repository) {
+        chatRepository = repository;
+        messagesLiveData = new MediatorLiveData<>();
+        loadingState = new MutableLiveData<>();
+        errorState = new MutableLiveData<>();
+        executorService = Executors.newSingleThreadExecutor();
+        cachedMessages = new ArrayList<>();
+    }
+
+    // Obtén LiveData de los mensajes
+    public LiveData<List<Message>> getMessagesLiveData() {
+        return messagesLiveData;
+    }
+
+    // Obtén el estado de carga
+    public LiveData<Boolean> getLoadingState() {
+        return loadingState;
+    }
+
+    // Obtén el estado de error
+    public LiveData<String> getErrorState() {
+        return errorState;
+    }
+
+    // Cargar mensajes desde el repositorio y manejar errores
+    public void loadMessages(int conversationId) {
+        loadingState.setValue(true);
+        executorService.execute(() -> {
+            try {
+                List<Message> messages = chatRepository.getMessagesForConversation(conversationId);
+                cachedMessages.clear();
+                cachedMessages.addAll(messages);
+                messagesLiveData.postValue(messages);
+                loadingState.postValue(false);
+            } catch (Exception e) {
+                loadingState.postValue(false);
+                errorState.postValue("Error cargando mensajes: " + e.getMessage());
+            }
+        });
+    }
+
+    // Enviar un mensaje y actualizar el caché
+    public void sendMessage(String text, int conversationId, boolean isFromBot) {
+        Message newMessage = new Message(conversationId, text, isFromBot, System.currentTimeMillis(), false, "text", null, 1, null);
+        executorService.execute(() -> {
+            try {
+                chatRepository.insertMessage(newMessage);
+                cachedMessages.add(newMessage);
+                messagesLiveData.postValue(new ArrayList<>(cachedMessages));
+            } catch (Exception e) {
+                errorState.postValue("Error enviando mensaje: " + e.getMessage());
+            }
+        });
+    }
+
+    // Filtrar mensajes por texto y actualizar LiveData
+    public void filterMessages(String keyword) {
+        List<Message> filteredMessages = new ArrayList<>();
+        for (Message message : cachedMessages) {
+            if (message.getText() != null && message.getText().contains(keyword)) {
+                filteredMessages.add(message);
+            }
+        }
+        messagesLiveData.setValue(filteredMessages);
+    }
+
+    // Transformación para obtener el conteo de mensajes
+    public LiveData<Integer> getMessageCount() {
+        return Transformations.map(messagesLiveData, List::size);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        executorService.shutdown();
+    }
+}

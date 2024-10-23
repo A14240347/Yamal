@@ -1,0 +1,320 @@
+# PUSBEC YAML Configuration - Fully Detailed for RH Advanced Chatbot
+
+project:
+  name: RH Advanced Chatbot and Mobile App
+  description: |
+    Chatbot avanzado de Recursos Humanos diseñado para realizar entrevistas dinámicas y responder preguntas
+    mediante interacciones por voz y texto. Este proyecto utiliza procesamiento de lenguaje natural (NLP) y
+    capacidades generativas para un flujo de conversación adaptativo y eficiente en entrevistas de RH.
+  version: 2.0.0
+  maintainer: [Nombre del mantenedor]
+  license: MIT
+
+dependencies:
+  # Java configuration for backend compatibility
+  java:
+    min_version: "11"
+    detect_version: "java -version"
+    description: |
+      Java 11 es requerido para asegurar compatibilidad con el backend en Android y 
+      permitir la integración de servicios avanzados que se utilizan en la aplicación.
+  
+  # Gradle for build automation and Android project management
+  gradle:
+    min_version: "8.10.2"
+    detect_version: "./gradlew -v"
+    description: |
+      Gradle es necesario para la construcción automatizada del proyecto Android y la gestión 
+      de dependencias, lo que asegura un entorno de compilación coherente y eficiente.
+
+  # Python and its specific dependencies for chatbot logic and API interactions
+  python:
+    min_version: "3.8"
+    detect_version: "python3 --version"
+    libraries:
+      - name: PyGithub
+        version: "1.55"
+        description: |
+          PyGithub permite al bot interactuar con GitHub para gestionar issues y 
+          comentarios, ofreciendo una automatización de tareas de soporte y mantenimiento.
+      - name: openai
+        version: "0.10.0"
+        description: |
+          La biblioteca OpenAI se utiliza para acceder a la API de GPT, permitiendo 
+          la generación de respuestas y flujos de conversación adaptativos en tiempo real.
+      - name: google-cloud-speech
+        version: "2.0.0"
+        description: |
+          Google Cloud Speech proporciona las funcionalidades de reconocimiento y 
+          síntesis de voz, esenciales para las interacciones por voz del chatbot.
+
+  # Flutter SDK for mobile UI development
+  flutter:
+    min_version: "2.5.0"
+    detect_version: "flutter --version"
+    description: |
+      Flutter es el framework principal para el desarrollo de interfaces de usuario móviles,
+      permitiendo crear una experiencia de usuario moderna y fluida, y asegurando compatibilidad
+      con los SDKs y servicios avanzados requeridos por el proyecto.
+
+  # Firebase SDK for secure authentication and database integration
+  firebase:
+    version: "BoM 28.4.0"
+    description: |
+      Firebase se utiliza para autenticación y almacenamiento de datos. El SDK de Firebase
+      proporciona una manera segura de autenticar usuarios y almacenar la información de las
+      entrevistas y evaluaciones de RH.
+
+  # Rasa for NLP capabilities and adaptive conversational flow
+  rasa:
+    min_version: "3.0.0"
+    detect_version: "rasa --version"
+    description: |
+      Rasa es fundamental para el procesamiento de lenguaje natural, permitiendo al chatbot
+      entender las respuestas de los usuarios y ajustar sus preguntas y el flujo de la conversación
+      basándose en las respuestas y contextos previos.
+
+  # Git for version control and deployment automation
+  git:
+    min_version: "2.x"
+    detect_version: "git --version"
+    description: |
+      Git se utiliza para el control de versiones y para automatizar el despliegue. Permite
+      mantener un historial de cambios preciso y gestionar colaboraciones y despliegues
+      a través de GitHub Actions.
+
+environment:
+  # Configuration for secure API key management and environment-specific settings
+  variables:
+    - name: GITHUB_TOKEN
+      description: |
+        El token de GitHub es necesario para que el bot interactúe automáticamente con la API
+        de GitHub, gestionando issues, comentarios y otras funcionalidades automatizadas.
+    - name: API_KEY
+      description: |
+        Clave API para el servicio GPT y NLP, necesaria para acceder a OpenAI y proporcionar
+        funcionalidades generativas en el bot.
+    - name: FIREBASE_API_KEY
+      description: |
+        La clave de Firebase asegura la autenticación segura y el acceso a la base de datos
+        para almacenar información de las entrevistas y evaluaciones.
+    - name: RASA_API_ENDPOINT
+      description: |
+        URL del servidor de Rasa que permite al bot enviar y recibir datos de NLP en tiempo
+        real, comprendiendo y procesando las respuestas del usuario.
+    - name: GOOGLE_SPEECH_API_KEY
+      description: |
+        Clave API de Google Speech para el reconocimiento y procesamiento de voz, permitiendo
+        que el bot interactúe por voz.
+    - name: PATH
+      append: $PATH:/usr/local/bin:/path/to/flutter/bin:/path/to/firebase
+      description: |
+        Rutas extendidas para acceso a las herramientas y scripts necesarios en el entorno de
+        desarrollo y producción, asegurando compatibilidad y disponibilidad.
+
+build:
+  # Step-by-step build process to ensure environment setup, dependency installation, and APK compilation
+  steps:
+    - step: Verificación de entornos
+      commands:
+        - echo "Java Version: $(java -version)"
+        - echo "Python Version: $(python3 --version)"
+        - echo "Flutter Version: $(flutter --version)"
+        - echo "Rasa Version: $(rasa --version)"
+        - echo "Google Speech Version: $(pip show google-cloud-speech)"
+      description: |
+        Verifica que todas las versiones de las herramientas requeridas estén instaladas y sean
+        compatibles, lo cual es esencial para un entorno de compilación confiable y funcional.
+
+    - step: Instalación de dependencias de Python
+      command: pip install -r requirements.txt
+      description: |
+        Instala todas las dependencias de Python necesarias para la lógica del backend y el NLP.
+        Esto incluye bibliotecas como PyGithub, OpenAI, y Google Speech, asegurando que el bot
+        tenga acceso a sus capacidades de automatización, generación de respuestas y voz.
+
+    - step: Entrenamiento de modelos de Rasa
+      command: rasa train
+      description: |
+        Entrena el modelo de Rasa con datos de entrenamiento específicos para el contexto de
+        entrevistas de Recursos Humanos, permitiendo al bot comprender y responder de manera
+        precisa y adaptativa durante las entrevistas.
+
+    - step: Configuración de Firebase
+      command: firebase use --add
+      description: |
+        Configura la conexión segura a Firebase para autenticar usuarios y almacenar datos de las
+        entrevistas, asegurando que la aplicación se ejecute con seguridad y cumpla con los
+        requisitos de manejo de datos de usuario.
+
+    - step: Construcción de Flutter y Android
+      commands:
+        - flutter build apk --debug
+        - flutter build apk --release
+      description: |
+        Compila el APK en modo debug para pruebas y en modo release para producción. Este paso
+        asegura que el frontend esté listo para ser probado y desplegado en dispositivos Android.
+
+    - step: Compilación del backend de Android
+      command: ./gradlew build
+      description: |
+        Compila el backend de Android, asegurando que todas las dependencias y configuraciones
+        de Gradle están correctas. Esto permite que la aplicación se ejecute con integración
+        completa de los servicios de Google y las herramientas de Java.
+
+    - step: Finalización de la construcción
+      command: echo "Construcción completa. Los APKs y artefactos están disponibles en el directorio de salida."
+      description: |
+        Mensaje final de construcción para confirmar que el proceso ha sido exitoso. Los archivos
+        APK y otros artefactos de compilación están disponibles para pruebas y despliegue.
+
+  artifacts:
+    - path: build/outputs/apk/
+      description: |
+        Directorio de salida para los archivos APK, lo cual permite su distribución en dispositivos
+        para pruebas y para despliegues de producción.
+    - path: models/
+      description: |
+        Directorio de los modelos de Rasa entrenados, que se utilizan para las interacciones
+        de NLP del chatbot y la comprensión de las entrevistas.
+
+resources:
+  # Data files for training and configuration files for tools
+  training_data:
+    - data/nlu.yml
+      description: |
+        Datos de entrenamiento para el procesamiento de lenguaje natural, esenciales para que
+        el chatbot pueda entender y responder de manera precisa en el contexto de entrevistas.
+    - data/stories.yml
+      description: |
+        Flujos de conversación diseñados para entrevistas de Recursos Humanos, permitiendo al bot
+        seguir una estructura adaptativa basada en las respuestas del usuario.
+    - data/speech.yml
+      description: |
+        Datos de entrenamiento específicos para comandos por voz, permitiendo que el bot interactúe
+        mediante reconocimiento de voz en entrevistas y evaluaciones.
+
+  gradle_files:
+    - Build.gradle
+      description: |
+        Archivo de configuración de Gradle que incluye todas las dependencias y configuraciones
+        de compilación necesarias para asegurar el funcionamiento de la aplicación en Android.
+
+  firebase_config:
+    - google-services.json
+      description: |
+        Archivo de configuración de Firebase para habilitar servicios de autenticación y base de
+        datos, asegurando seguridad en el manejo de datos y autenticación de usuario.
+
+source_files:
+  flutter:
+    - main.dart
+      description: |
+        Punto de entrada para la aplicación Flutter, donde se maneja la lógica de navegación y la
+        integración de las interfaces de usuario para entrevistas.
+    - home_page.dart
+      description: |
+        Pantalla principal de la aplicación, desde donde el usuario puede iniciar las entrevistas
+        y acceder a otras funcionalidades del bot de RH.
+
+  backend:
+    - chatbot.py
+      description: |
+        Script principal del backend del bot, donde se maneja la lógica de entrevistas y respuestas,
+        permitiendo la adaptación dinámica basada en las respuestas del usuario.
+    - voice_assistant.py
+      description: |
+        Script para habilitar la interacción por voz utilizando Google Speech, asegurando que el bot
+        pueda responder y captar comandos de voz en tiempo real.
+    - gpt_assistant.sh
+      description: |
+        Script de Bash para integrar la API de OpenAI y generar respuestas en las entrevistas, ofreciendo
+        una experiencia adaptativa y fluida en el flujo de conversación.
+
+testing:
+  # Comprehensive testing frameworks and commands for various aspects of the chatbot and application
+  frameworks:
+    - name: JUnit
+      version: "4.13.2"
+      description: |
+        Framework de pruebas unitarias para asegurar que el backend de Java esté funcionando
+        correctamente, probando la integración con Firebase y otras dependencias.
+    - name: Pytest
+      version: "6.x"
+      description: |
+        Pruebas de Python para verificar la lógica adaptativa de entrevistas, asegurando que
+        las respuestas del bot sean precisas y consistentes.
+    - name: Rasa Test
+      description: |
+        Pruebas específicas de Rasa para garantizar que el modelo de NLP pueda comprender el
+        lenguaje y responder de manera adecuada en el contexto de entrevistas.
+    - name: Google Speech Test
+      description: |
+        Pruebas para verificar la precisión del reconocimiento de voz y la respuesta a comandos
+        de voz, lo cual es fundamental para la funcionalidad de interacciones por voz.
+
+  commands:
+    unit_tests:
+      - command: gradle test --info
+      - command: pytest tests/ --maxfail=5 --disable-warnings -v
+    integration_tests:
+      - command: flutter test
+      - command: rasa test
+      - command: pytest tests/voice_tests.py
+
+documentation:
+  files:
+    - README.md
+      description: |
+        Guía de usuario y desarrollador que proporciona una visión general del proyecto,
+        instrucciones de configuración y despliegue, y detalles sobre el funcionamiento del bot.
+    - LICENSE.md
+      description: |
+        Archivo de licencia que cubre los términos de uso y distribución del software.
+    - docs/
+      description: |
+        Documentación técnica completa que detalla los flujos de entrevistas, funcionalidades de RH,
+        y personalización del bot, proporcionando recursos para configuraciones avanzadas.
+
+ci_cd:
+  github_actions:
+    workflows:
+      - name: Full CI/CD Pipeline with Voice and NLP
+        file: .github/workflows/pusbec.yml
+        triggers:
+          - push
+          - pull_request
+        jobs:
+          - job: setup
+            runs-on: ubuntu-latest
+            steps:
+              - name: Configuración inicial
+                uses: actions/setup-java@v2
+                with:
+                  java-version: "11"
+              - name: Instalación de SDKs y Herramientas
+                run: |
+                  git clone https://github.com/flutter/flutter.git -b stable
+                  export PATH="$PATH:`pwd`/flutter/bin"
+                  pip install rasa google-cloud-speech
+          - job: build
+            runs-on: ubuntu-latest
+            steps:
+              - name: Compilación completa del backend y frontend
+                run: ./gradlew build && flutter build apk --release
+          - job: deploy
+            runs-on: ubuntu-latest
+            steps:
+              - name: Despliegue y Notificación
+                run: firebase deploy --only hosting
+              - name: Notificación de Slack
+                uses: slackapi/slack-github-action@v1.15.0
+                with:
+                  status: success
+                  channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+                  text: "Despliegue completado del Chatbot RH con integraciones de entrevistas dinámicas y reconocimiento de voz."
+
+# Notas adicionales:
+# Este `pusbec.yaml` cubre todos los aspectos esenciales del proyecto, con un enfoque en las entrevistas adaptativas,
+# la integración por voz y texto, y configuraciones avanzadas de CI/CD. Asegúrate de probar cada flujo y funcionalidad
+# para mantener estabilidad y confiabilidad en el despliegue y uso de la aplicación.

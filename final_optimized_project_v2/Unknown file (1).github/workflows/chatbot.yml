@@ -1,0 +1,28 @@
+name: Chatbot
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  respond_to_issue:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        echo "Instalando dependencias para el chatbot"
+        # Instala las dependencias necesarias
+        # pip install PyGithub
+
+    - name: Run Chatbot Script
+      run: |
+        python chatbot.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

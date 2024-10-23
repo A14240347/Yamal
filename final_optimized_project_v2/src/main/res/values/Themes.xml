@@ -1,0 +1,60 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema principal de la aplicación -->
+    <style name="Theme.AdvancedChatBot" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Colores principales -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <!-- Colores de fondo y superficie -->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <!-- Colores de texto y acento -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:colorHint">@color/colorHint</item>
+
+        <!-- Estilos de botones -->
+        <item name="buttonStyle">@style/Widget.AppTheme.Button</item>
+        <item name="materialButtonStyle">@style/Widget.AppTheme.Button.MaterialButton</item>
+
+        <!-- Configuración de iconos -->
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <!-- Estilo para botones personalizados -->
+    <style name="Widget.AppTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.AppTheme.Button.MaterialButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:backgroundTint">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorOnSecondary</item>
+    </style>
+
+    <!-- Tema oscuro para la aplicación -->
+    <style name="Theme.AdvancedChatBot.Dark" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="android:colorBackground">@color/colorSurface</item>
+        <item name="colorSurface">@color/colorBackground</item>
+        <item name="colorOnSurface">@color/colorOnBackground</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="android:colorHint">@color/colorHint</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+    </style>
+</resources>

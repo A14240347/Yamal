@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Contenedor de mensajes -->
+    <ScrollView
+        android:id="@+id/chatScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/messageInputContainer"
+        android:layout_margin="8dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/chatContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- Indicador de carga -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <!-- Barra de entrada de mensaje -->
+    <LinearLayout
+        android:id="@+id/messageInputContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="?android:attr/windowBackground">
+
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Escribe un mensaje..."
+            android:background="@drawable/edit_text_background"
+            android:padding="10dp"
+            android:layout_marginEnd="8dp"
+            android:imeOptions="actionSend"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/send_button_background"
+            android:padding="10dp"
+            android:text="Enviar"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:padding="16dp">
+
+    <!-- Logo o Imagen de Bienvenida -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/app_name" />
+
+    <!-- Título de la Aplicación -->
+    <TextView
+        android:id="@+id/appTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logoImageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="@string/app_name"
+        android:textSize="24sp"
+        android:textColor="@color/primaryTextColor"
+        android:textStyle="bold" />
+
+    <!-- Subtítulo o Descripción -->
+    <TextView
+        android:id="@+id/appSubtitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appTitleTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="@string/welcome_message"
+        android:textSize="16sp"
+        android:textColor="@color/secondaryTextColor"
+        android:gravity="center" />
+
+    <!-- Campo de Entrada de Correo Electrónico -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appSubtitleTextView"
+        android:layout_marginTop="32dp"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="8dp"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/secondaryTextColor" />
+
+    <!-- Campo de Entrada de Contraseña -->
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailEditText"
+        android:layout_marginTop="16dp"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="8dp"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/secondaryTextColor" />
+
+    <!-- Botón de Inicio de Sesión -->
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_background"
+        android:text="Iniciar Sesión"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="12dp" />
+
+    <!-- Botón de Registro o Ingreso Anónimo -->
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginButton"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button_secondary_background"
+        android:text="Registrarse o Continuar como Invitado"
+        android:textColor="@color/primaryColor"
+        android:padding="12dp" />
+
+</RelativeLayout>
